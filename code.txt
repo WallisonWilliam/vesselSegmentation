@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+
+# Carregar a imagem
+imagem = cv2.imread('bases/img_3.png')
+
+# Converter para escala de cinza
+cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
+# Realçar o contraste utilizando equalização do histograma
+contraste = cv2.equalizeHist(cinza)
+
+# Remover ruídos com um filtro Gaussiano
+gauss = cv2.GaussianBlur(contraste, (5, 5), 0)
+
+# Detecção de bordas usando o algoritmo de Canny
+canny = cv2.Canny(gauss, 50, 100)
+
+# Morfologia matemática para remover pequenos pontos
+kernel = np.ones((2,2),np.uint8)
+morfo = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, kernel)
+
+# Exibir a imagem original e a imagem processada lado a lado
+cv2.imshow('Original', imagem)
+cv2.imshow('Vasos Sanguíneos', morfo)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
